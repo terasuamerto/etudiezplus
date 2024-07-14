@@ -1,0 +1,39 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block sousMainContent %}
+                
+<div class="container">
+    <h2>Leçons</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>titre</th>
+                <th>intitule</th>
+                <th>niveau</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for lecon in allLecon %}
+                <tr>
+                    <td> {{ lecon.id }} </td>
+                    <td>{{ lecon.titre }}</td>
+                    <td>{{ lecon.cours.matiere.intitule }} </td>
+                    <td> {{ lecon.cours.niveau.intitule }} </td>
+                    <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            
+            <!-- Ajoutez d'autres lignes pour chaque entrée -->
+        </tbody>
+    </table>
+    <a href="#" class="add-button">Ajouter une leçon</a>
+    <div class="nbre-element"> {{ allLecon|length }} élément(s)</div>
+</div>
+
+{% endblock sousMainContent %}

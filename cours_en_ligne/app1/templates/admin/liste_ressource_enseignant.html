@@ -1,0 +1,37 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block sousMainContent %}
+                
+<div class="container">
+    <h2>Ressources</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>titre</th>
+                <th>Leçon</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for ressource in allRessource %}
+                <tr>
+                    <td> {{ ressource.id }} </td>
+                    <td>{{ ressource.titre }}</td>
+                    <td>{{ ressource.lecon.titre }} </td>
+                    <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            
+            <!-- Ajoutez d'autres lignes pour chaque entrée -->
+        </tbody>
+    </table>
+    <a href="#" class="add-button">Ajouter une ressource</a>
+    <div class="nbre-element"> {{ allRessource|length }} élément(s)</div>
+</div>
+
+{% endblock sousMainContent %}

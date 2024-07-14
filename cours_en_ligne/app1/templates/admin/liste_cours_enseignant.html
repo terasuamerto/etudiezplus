@@ -1,0 +1,37 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block sousMainContent %}
+                
+<div class="container">
+    <h2>Cours</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>titre</th>
+                <th>instructeur</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for cours in allCours %}
+                <tr>
+                    <td> {{ cours.id }} </td>
+                    <td>{{ cours.titre }}</td>
+                    <td>{{ cours.instructeur.user.first_name }}  {{ cours.instructeur.user.last_name }}</td>
+                    <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            
+            <!-- Ajoutez d'autres lignes pour chaque entrée -->
+        </tbody>
+    </table>
+    <a href="#" class="add-button">Ajouter un cours</a>
+    <div class="nbre-element"> {{ allCours|length }} élément(s)</div>
+</div>
+
+{% endblock sousMainContent %}

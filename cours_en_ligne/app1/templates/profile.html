@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profil utilisateur - Ministère de l'Éducation
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Mes informations</h2>
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="first_name">Prénom:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="last_name">Nom:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="username">Nom d'utilisateur:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Numéro de téléphone:</label>
+            <input type="text" id="phone" name="phone" value="+226 {{ user_profile.tel }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        
+        <!-- Champ pour changer le mot de passe -->
+        <div class="form-group">
+            <label for="password">Nouveau mot de passe:</label>
+            <input type="password" id="password" name="password" minlength="8">
+        </div>
+        
+        <button type="submit">Modifier mes informations</button>
+    </form>
+    <h2>Mon abonnement</h2>
+    {% if subscription %}
+        <p>Choix d'abonnement: {{ subscription.plan }}</p>
+        <p>Date de début: {{ subscription.start_date }}</p>
+        <p>Date de fin: {{ subscription.end_date }}</p>
+        <p>Jours restants: {{ days_remaining }}</p>
+    {% else %}
+        <p>Vous n'avez pas d'abonnement actif.</p>
+    {% endif %}
+</div>
+<!-- Mon abonnement -->
+<div class="profile-section">
+    
+</div>
+{% endblock %}

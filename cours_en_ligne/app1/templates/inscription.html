@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+<main>
+    <section class="inscription-section">
+        <div class="inscription-form-container">
+            <h2>Inscription</h2>
+            <form id="inscription-form" method="post" action="{% url 'inscription'%}">
+                {% csrf_token %}
+                {% if errorInscription %}
+                    <div class="error-message" id="errorInscription">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="nom">Nom :</label>
+                    <input type="text" id="nom" name="nom" placeholder="Nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom :</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Prénom" required>
+                </div>
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur :</label>
+                    <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="tel">Téléphone :</label>
+                    <input type="tel" id="tel" name="tel" value="+226 " oninput="maintainPrefix()" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+                </div>
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script>
+    function maintainPrefix() {
+        const input = document.getElementById('tel');
+        if (!input.value.startsWith('+226 ')) {
+            input.value = '+226 ';
+        }
+    }
+
+    // Initial setting of the prefix
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('tel');
+        if (!input.value.startsWith('+226 ')) {
+            input.value = '+226 ';
+        }
+    });
+</script>
+{% endblock %}

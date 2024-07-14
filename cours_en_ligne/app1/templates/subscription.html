@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Choisissez votre abonnement{% endblock %}
+
+{% block content %}
+<div id="subscription-options">
+    <h2>Choisissez votre abonnement</h2>
+    <div class="subscription-cards">
+        <div class="subscription-card">
+            <h3>Standard</h3>
+            <p class="price">100F</p>
+            <p>Accédez à toutes les cours de base et aux ressources essentielles.</p>
+            <a href="{% url 'subscribe_standard' %}" class="button">Choisir Standard</a>
+        </div>
+        <div class="subscription-card premium">
+            <h3>Premium</h3>
+            <p class="price">150F</p>
+            <p>Bénéficiez de tous les avantages du plan Standard, plus des cours avancés et des supports supplémentaires.</p>
+            <a href="{% url 'subscribe_premium' %}" class="button premium">Choisir Premium</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

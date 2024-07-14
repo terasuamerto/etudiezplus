@@ -1,0 +1,238 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block LienEntete %}
+<link rel="stylesheet" href="{% static 'css/style_form.css' %}">
+{% endblock LienEntete %}
+
+
+
+{% block enteteTitre %}
+<h1>Ajout de grands points</h1>
+{% endblock enteteTitre %}
+
+
+{% block sousMainContent %}
+<style>
+   
+  </style>
+
+<div class="container">
+    <form id="submit-ressource-form" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="titre">Titre :</label>
+            <input type="text" id="titre" name="titre" required>
+            <div class="error-message" id="error-titre"> </div>
+        </div>
+      
+      
+      <div class="form-group">
+            <label for="type_contenu">Type de contenu :</label>
+            <select id="type_contenu" name="type_contenu" required>
+                <option value="default" selected>Choisisser un type de contenu</option>
+                <option value="pdf">PDF</option>
+                <option value="video">Vidéo</option>
+                <option value="lien">Lien hypertexte</option>
+            </select>
+            <div class="error-message" id="error-type_contenu"></div>
+      </div>
+      
+      <div class="form-group">
+        <div id="contenu_pdf_block" style="display: none;">
+            <label for="contenu_pdf">Contenu PDF :</label>
+            <input type="file" id="contenu_pdf" name="contenu_pdf">
+          </div>
+      </div>
+      
+      
+      <div class="form-group">
+        <div id="contenu_video_block" style="display: none;">
+            <label for="contenu_video">Contenu Vidéo :</label>
+            <input type="file" id="contenu_video" name="contenu_video">
+          </div>
+      </div>
+      
+      
+
+      
+      <div id="lien_hypertexte_block" style="display: none;">
+            <div class="form-group">
+                <label for="lien_hypertexte">Lien hypertexte :</label>
+                <input type="url" id="lien_hypertexte" name="lien_hypertexte">
+            </div>
+        
+      </div>
+      
+      <div class="form-group">
+        <label for="cours_associee">Cours associé :</label>
+
+        <select id="cours_associee" name="cours_associee" required="true">
+          <option value="default" selected>Choisisser un cours</option>
+          {% for cours in Cours %}
+              <option value="{{cours.id}}">{{cours.titre}}</option>
+          {% endfor %}
+      </select>
+      <div class="error-message" id="error-cours_associee"></div>
+      </div>
+     
+      
+      
+      
+      <button type="submit" class="btn-submit" >Enregistrer et ajouter un autre grand point</button>
+      <button type="submit" class="btn-submit suivant">Suivant</button>
+    </form>
+  </div>
+{% endblock sousMainContent %}
+
+
+{% block CodeJs %}
+
+<script>
+
+   
+
+      document.addEventListener('DOMContentLoaded', function() {
+          function validateForm(event) {
+              event.preventDefault(); // Prevent the form from submitting immediately
+      
+              // Clear previous error messages
+              document.getElementById('error-titre').textContent = '';
+              document.getElementById('error-type_contenu').textContent = '';
+              document.getElementById('error-cours_associee').textContent = '';
+      
+              // Get form values
+              const titre = document.getElementById('titre').value.trim();
+              const typeContenu = document.getElementById('type_contenu').value;
+              const coursAssociee = document.getElementById('cours_associee').value;
+      
+              let isValid = true;
+      
+              // Validate Titre
+              if (titre === '') {
+                  document.getElementById('error-titre').textContent = 'Le titre est requis.';
+                  document.getElementById('error-titre').style.color = "red";
+                  isValid = false;
+              }
+      
+              // Validate Type de Contenu
+              if (typeContenu === 'default') {
+                  document.getElementById('error-type_contenu').textContent = 'Veuillez choisir un type de contenu.';
+                  document.getElementById('error-type_contenu').style.color = "red";
+                  isValid = false;
+              } else {
+                  // Additional validation based on type of content
+                  if (typeContenu === 'pdf' && document.getElementById('contenu_pdf').files.length === 0) {
+                      document.getElementById('error-type_contenu').textContent = 'Un fichier PDF est requis.';
+                      document.getElementById('error-type_contenu').style.color = 'red';
+                      isValid = false;
+                  } else if (typeContenu === 'video' && document.getElementById('contenu_video').files.length === 0) {
+                      document.getElementById('error-type_contenu').textContent = 'Un fichier vidéo est requis.';
+                      document.getElementById('error-type_contenu').style.color = 'red';
+                      isValid = false;
+                  } else if (typeContenu === 'lien' && document.getElementById('lien_hypertexte').value.trim() === '') {
+                      document.getElementById('error-type_contenu').textContent = 'Un lien hypertexte est requis.';
+                      document.getElementById('error-type_contenu').style.color = 'red';
+                      isValid = false;
+                  }
+              }
+      
+              // Validate Cours Associée
+              if (coursAssociee === 'default') {
+                  document.getElementById('error-cours_associee').textContent = 'Veuillez choisir un cours associé.';
+                  document.getElementById('error-cours_associee').style.color = 'red';
+                  isValid = false;
+              }
+      
+              // If valid, submit the form
+              if (isValid) {
+                  document.getElementById('submit-ressource-form').submit();
+                  addGrandPoint(true);
+              }
+          }
+      
+          // Show/hide file inputs based on selected content type
+          document.getElementById('type_contenu').addEventListener('change', function() {
+              const typeContenu = this.value;
+              document.getElementById('contenu_pdf_block').style.display = (typeContenu === 'pdf') ? 'block' : 'none';
+              document.getElementById('contenu_video_block').style.display = (typeContenu === 'video') ? 'block' : 'none';
+              document.getElementById('lien_hypertexte_block').style.display = (typeContenu === 'lien') ? 'block' : 'none';
+          });
+      
+          // Attach the validation function to the submit button
+          document.querySelector('.btn-submit').addEventListener('click', validateForm);
+      });
+      
+      function addGrandPoint(suivant){
+        
+        var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    
+        // Make an AJAX request to your backend view with the selected year and CSRF token
+        var xhr = new XMLHttpRequest();
+
+        var optionSelectionneeCours = document.getElementById("cours_associee").value;
+
+        var url = "{% url 'create_grands_points_enseignant' coursId=0 %}".replace('0', optionSelectionneeCours);
+                    
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+        
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Parse the JSON response from the backend
+                var resultat = JSON.parse(xhr.responseText);
+
+                if(suivant){
+                  console.log(resultat);
+
+                }
+                
+                console.log(resultat);
+            }
+        };
+
+        var form = document.getElementById('submit-ressource-form');
+
+        var titre = document.getElementById('titre').value;
+        
+        var optionSelectionneeContenu = document.getElementById("type_contenu").value;
+
+        var contenu_pdf = document.getElementById('contenu_pdf').value;
+        var contenu_video = document.getElementById('contenu_video').value;
+        var lien_hypertexte = document.getElementById('lien_hypertexte').value;
+        
+
+        
+
+
+        var contenu;
+        if(optionSelectionneeContenu ==="pdf"){
+          contenu = contenu_pdf;
+        }else if(optionSelectionneeContenu ==="video"){
+          contenu = contenu_video;
+        } else if(optionSelectionneeContenu ==="lien"){
+
+          contenu = lien_hypertexte;
+        }
+
+        form.reset();
+        xhr.send(
+              "titre="+ titre
+              + '&' + "type_contenu="+optionSelectionneeContenu
+              + '&' + "contenu="+contenu
+              + '&' + "cours="+optionSelectionneeCours
+              + '&' + "suivant="+suivant
+        );
+      }
+      
+
+
+
+
+
+  </script>
+{% endblock CodeJs %}

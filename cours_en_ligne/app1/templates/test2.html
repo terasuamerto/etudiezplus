@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaire de récupération de données</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Formulaire de récupération de données</h2>
+    <form id="formDonnees">
+        <div class="form-group">
+            <label for="titre">Titre :</label>
+            <input type="text" id="titre" name="titre" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description :</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="vues">Vues :</label>
+            <input type="number" id="vues" name="vues" required>
+        </div>
+        <div class="form-group">
+            <label for="likes">Likes :</label>
+            <input type="number" id="likes" name="likes" required>
+        </div>
+        <div class="form-group">
+            <label for="instructeur">Instructeur :</label>
+            <input type="text" id="instructeur" name="instructeur" required>
+        </div>
+        <div class="form-group">
+            <label for="niveau">Niveau :</label>
+            <input type="text" id="niveau" name="niveau" required>
+        </div>
+        <div class="form-group">
+            <label for="matiere">Matière :</label>
+            <input type="text" id="matiere" name="matiere" required>
+        </div>
+        <div class="form-group">
+            <label for="prerequis">Prérequis :</label>
+            <textarea id="prerequis" name="prerequis" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="estimation">Estimation :</label>
+            <input type="number" id="estimation" name="estimation" required>
+        </div>
+        <div class="form-group">
+            <label for="detail_estimation">Détail estimation :</label>
+            <textarea id="detail_estimation" name="detail_estimation" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="a_propos">À propos :</label>
+            <textarea id="a_propos" name="a_propos" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">Image :</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <button type="submit">Soumettre</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#formDonnees').submit(function(event) {
+        event.preventDefault(); // Empêche la soumission par défaut du formulaire
+        
+        // Récupération des données du formulaire
+        var formData = new FormData(this);
+        
+        // Envoi des données via AJAX
+        $.ajax({
+            url: 'votre_script_de_traitement.php', // URL de votre script de traitement
+            type: 'POST', // Méthode HTTP
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Traitement à effectuer en cas de succès (optionnel)
+                console.log('Données envoyées avec succès');
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Gestion des erreurs (optionnel)
+                console.error('Erreur lors de l\'envoi des données : ' + status);
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

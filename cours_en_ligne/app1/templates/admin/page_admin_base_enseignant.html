@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %} Page d'administration{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style_admin.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}" ></script>
+    <script src="{% static 'js/DOMPurify.js' %}" ></script>
+    {% block LienEntete %}
+    {% endblock LienEntete %}
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="{% url 'liste_element' element="matiere" %}">Matières</a></li>
+            <li><a href="{% url 'liste_element' element="niveau" %}">Niveaux</a></li>
+            <li><a href="{% url 'liste_cours_enseignant' %}">Cours</a></li>
+            <li><a href="{% url 'liste_lecon_enseignant' %}">Leçons</a></li>
+            <li><a href="{% url 'liste_ressource_enseignant' %}">Ressources</a></li>
+            <li><a href="{% url 'liste_grands_points_enseignant' %}">Grands points</a></li>
+            <li><a href="{% url 'liste_inscription_cours_enseignant' %}">Inscriptions</a></li>
+        </ul>
+    </div>
+    {% block content %}
+        <div class="main-content">
+            <div class="header">
+
+                {% block enteteTitre %}
+                    <h1>Page d'administration</h1>
+                {% endblock enteteTitre %}
+                
+            </div>
+
+            {% block sousMainContent %}
+                
+            {% endblock sousMainContent %}
+            
+        </div>
+
+    {% endblock %}
+
+
+
+    {% block CodeJs %}
+    {% endblock CodeJs %}
+</body>
+</html>

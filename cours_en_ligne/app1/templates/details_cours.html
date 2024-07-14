@@ -1,0 +1,506 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ cours.titre }}
+{% endblock %}
+
+ {% block LienEntete %}
+<link rel="stylesheet" href="{% static 'css/details_cours.css' %}">
+<script src="{% static 'js/script_detail_cours.js' %}"  defer></script>
+    <script src="{% static 'js/jquery.min.js' %}" ></script>
+    <script src="{% static 'js/sidebar.js' %}" ></script>
+    <script src="{% static 'js/DOMPurify.js' %}" ></script>
+    {% endblock LienEntete %}
+
+
+{% block content %}
+<div class="container">
+        <i class="fa-solid fa-bars fa-2xl" style="color: #0073e6;" onclick="openLeft()"></i>
+        <div class="left" id="normal" >
+            <i class="fa-solid fa-xmark fa-xl" style="color: #0073e6;" onclick="closeLeft()" ></i>
+            <h2>{{ cours.titre }}</h2>
+            <div class="list_content">
+                <div class="header" id="title1">
+                    <i  class="fa-solid fa-arrow-right flecheNormale" style="color: #0073e6;"></i>
+                    <!-- <i  class="fa-solid fa-arrow-down-long fa-lg flecheDown" style="color: #0073e6;"></i> -->
+                    <h3 >Contenu Cours</h3>
+                </div>
+                <div id="content1" >
+                    <ul>
+                        {% csrf_token %}
+                        {% for lecon in allLecons %}
+<!--                            <a href="{% url 'details_cours' id=cours.id lecon=lecon.id %}"><li>Leçon {{ lecon.num_ordre }}</li></a>-->
+                            <a href="#" id="{{ lecon.id }}"><li>Leçon {{ lecon.num_ordre }}</li></a>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+            <span >Progression</span>
+            <a href="#">Forum de discussion</a>
+        </div>
+
+        <div class="left2"  id="sidebar">
+            <i class="fa-solid fa-xmark fa-xl" style="color: #0073e6;" onclick="closeLeft()"></i>
+            <h2>{{ cours.intitule }} </h2>
+            <div class="list_content">
+                <div class="header" id="title2">
+                    <i  class="fa-solid fa-arrow-right flecheNormale" style="color: #0073e6;"></i>
+                    <!-- <i  class="fa-solid fa-arrow-down-long fa-lg flecheDown" style="color: #0073e6;"></i> -->
+                    <h3 >Contenu Cours</h3>
+                </div>
+                <div id="content2" >
+                    <ul>
+                        {% csrf_token %}
+                        {% for lecon in allLecons %}
+                            <a href="#" id="{{ lecon.id }}"><li>Leçon {{ lecon.num_ordre }}</li></a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <span onclick="progressBar()">Progression</span>
+            <a href="#">Forum de discussion</a>
+
+        </div>
+
+
+
+        <div class="center">
+
+                    <h2 id="titre">Leçon {{ lecon.num_ordre }}: {{ lecon.titre }}</h2>
+                <div class="content_cours">
+                    {% if lecon.type_de_contenu == "texte" %}
+                        <div class="content_texte" >
+                            {{ lecon.contenu_texte | safe }}
+                        </div>
+
+                    {% elif lecon.type_de_contenu == "pdf" %}
+                        <div class="content_pdf" >
+                            <embed src="{% url 'pdfcours' lecon=lecon.id %}" type="application/pdf">
+                        </div>
+
+                    {% else %}
+                    <div class="content_video" >
+                        <video id="displayVideo" controls >
+                            <source src="{% url 'videocours' lecon=lecon.id %}" type="video/mp4">
+                              Votre navigateur ne supporte pas la vidéo HTML5.
+                          </video>
+                    </div>
+                    {% endif %}
+
+                    <div class="content_texte" id="divContenteTexte">
+
+                    </div>
+                    <div class="content_pdf" id="divContentePdf">
+                        
+                    </div>
+
+                    <div class="content_video" id="divContenteVideo">
+                        <video id="videoId" controls >
+                            <source src="" type="video/mp4" id="sourceVideo">
+                            Votre navigateur ne supporte pas la vidéo HTML5.
+                          </video>
+                    </div>
+
+<!--                    <img src="{% static 'images/image1.jpeg' %}" alt="" >-->
+                </div>
+                <span>Ressource(s) du cours</span>
+                <div class="ressources">
+                    {% for ressource in allRessources %}
+                    {% csrf_token %}
+                        {% if ressource.type_de_contenu == "pdf" %}
+                                <div class="items">
+                                    <i class="fa-regular fa-file-pdf fa-lg" style="color: #0073e6;"></i>
+                                    <a href="#" class="exclude" id="{{ ressource.id}}-{{ ressource.type_de_contenu}}">{{ ressource.titre }}</a>
+                                </div>
+                        {% elif ressource.type_de_contenu == "video" %}
+                                <div class="items">
+                                    <i class="fa-regular fa-file-video fa-xl" style="color: #0073e6;"></i>
+                                    <a href="#" class="exclude" id="{{ ressource.id}}-{{ ressource.type_de_contenu}}">{{ ressource.titre }}</a>
+                                </div>
+                        {% else %}
+                                <div class="items">
+                                    <i class="fa-solid fa-link fa-lg" style="color: #0073e6;"></i>
+                                    <a href="#" class="exclude" id="{{ ressource.id}}-{{ ressource.type_de_contenu}}">{{ ressource.titre }}</a>
+                                </div>
+                                {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="avis" >
+                    <i class="fa-regular fa-thumbs-up fa-2xl" style="color: #0073e6;" id="{{ cours.id }}"></i>
+                    <span  id="likesTexte">{{ cours.likes }}</span>
+                </div>
+
+        </div>
+
+        <div class="right" id="rightContent" >
+            <h2 id="progression">  Progression </h2>
+            <div class="progressBar">
+                <div class="skill">
+                    <div class="outer">
+                        <div class="inner">
+                            <div id="number">
+                                65%
+                            </div>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
+                        <defs>
+                           <linearGradient id="GradientColor">
+                              <!-- <stop offset="0%" stop-color="#e91e63" /> -->
+                              <stop offset="0%" stop-color="#74C0FC" />
+                              <stop offset="100%" stop-color="#673ab7" />
+                           </linearGradient>
+                        </defs>
+                        <circle cx="80" cy="80" r="70" stroke-linecap="round" />
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+
+{% block CodeJs %}
+
+
+<script>
+
+    urlServer = "http://127.0.0.1:8000/"
+
+    //concerne les lecon
+    document.addEventListener('DOMContentLoaded', function() {
+    var liens = document.getElementsByTagName('a');
+
+    for (var i = 0; i < liens.length; i++) {
+        var lien = liens[i];
+
+        // Vérifie si le lien a une classe 'exclude'
+        if (!lien.classList.contains('exclude')) {
+            lien.addEventListener('click', function() {
+                var idLienClique = this.id;
+                console.log(idLienClique);
+                // Exemple d'action spécifique pour chaque lien
+                afficheLecon(idLienClique);
+                // Empêche le comportement par défaut du lien (redirection)
+                event.preventDefault();
+            });
+        }
+    }
+});
+
+
+//concerne les liens des fichiers ressources
+document.addEventListener('DOMContentLoaded', function() {
+    var liens = document.getElementsByTagName('a');
+
+    for (var i = 0; i < liens.length; i++) {
+        var lien = liens[i];
+
+        // Vérifie si le lien a une classe 'exclude'
+        if (lien.classList.contains('exclude')) {
+            lien.addEventListener('click', function() {
+                var donnees = this.id.split('-');
+
+                if(donnees[1] === 'pdf'){
+                    //console.log("pdf");
+                    telechargerPdfRessource(donnees[0]);
+                }else if (donnees[1] === 'video'){
+                    console.log("video");
+                    telechargerVideoRessource(donnees[0]);
+                }else{
+                    console.log('lien');
+                    ouvrirLienRessource(donnees[0])
+                }
+                //console.log(donnees);
+                // Exemple d'action spécifique pour chaque lien
+                //afficheLecon(idLienClique);
+                // Empêche le comportement par défaut du lien (redirection)
+                event.preventDefault();
+            });
+        }
+    }
+});
+
+
+
+
+//requete pour afficher le cours choisi
+
+function afficheLecon(leconId){
+    var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+
+    // Make an AJAX request to your backend view with the selected year and CSRF token
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'affiche_lecon' %}", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // Parse the JSON response from the backend
+            var lecon = JSON.parse(xhr.responseText);
+
+            var titre = document.getElementById("titre");
+            titre.innerHTML = DOMPurify.sanitize( "Leçon " + lecon["num"]+": "+ lecon["titre"] );
+
+            //les classes utilisees lors du premier chargement
+            var contenu_texte = document.querySelector(".content_texte");
+            var contenu_video = document.querySelector(".content_video");
+            var contenu_pdf = document.querySelector(".content_pdf");
+
+            // les elements manipulés par la requete ajax
+            var contenu_texteId = document.getElementById("divContenteTexte");
+            var contenu_videoId = document.getElementById("divContentePdf");
+            var contenu_pdfId = document.getElementById("divContenteVideo");
+
+            var contenu_affiche;
+            contenu_texte.style.display ="none";
+            contenu_video.style.display ="none";
+            contenu_pdf.style.display ="none";
+            contenu_texteId.style.display ="none";
+            contenu_videoId.style.display ="none";
+            contenu_pdfId.style.display ="none";
+
+
+            
+            
+            if(lecon["type_contenu"] === "texte"){
+                contenu_affiche = document.getElementById("divContenteTexte");
+                contenu_affiche.innerHTML = DOMPurify.sanitize(lecon["contenu"]);
+                contenu_affiche.style.display = "block";
+            }else if(lecon["type_contenu"] === "pdf"){
+                
+                 telechargerPdfCours(lecon["id"]);
+                
+            }else{
+                contenu_affiche = document.getElementById("divContenteVideo");
+
+                var video = document.getElementById('videoId');
+                var videoSrc = document.getElementById('sourceVideo');
+                videoSrc.setAttribute('src', "/videocours/"+lecon["id"]+"/");
+                video.load();
+                video.pause();
+                contenu_affiche.style.display = "block";
+            }
+            
+        }
+    };
+    
+    xhr.send("lecon=" +leconId);
+};
+
+
+
+//requete pour afficher le pdf du contenu du cours
+function telechargerPdfCours(ressourceId){
+    var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    
+    url = urlServer+"pdfcours/"+ressourceId
+    
+    // Make an AJAX request to your backend view with the selected year and CSRF token
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+
+    xhr.responseType = 'blob';  // Spécifiez le type de réponse attendu (blob pour les fichiers)    
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                
+                var responseContentType = xhr.getResponseHeader('Content-Type');
+                 if (responseContentType.includes('application/pdf')) {
+                    // Création du lien de téléchargement pour les fichiers PDF
+                    var blob = xhr.response;
+                    var pdfUrl = URL.createObjectURL(blob);
+                    var contenu_affiche = document.getElementById("divContentePdf");
+                    var pdfObject = document.createElement("iframe");
+
+                    pdfObject.src = pdfUrl;
+                    pdfObject.type = "application/pdf";
+                    contenu_affiche.appendChild(pdfObject);
+                   pdfObject.width = "100%";
+                    pdfObject.height = "100%";
+                    contenu_affiche.style.display = "block";
+                    
+                    } else{
+
+                        //traiter le cas ou l'utilisateur ne possede pas d'abonnement
+                        //console.log("pdf");
+                    }
+             };
+        
+        
+        };
+        xhr.send();
+}
+
+
+
+
+
+
+
+
+
+//gestion des likes
+icon = document.querySelector(".fa-regular.fa-thumbs-up.fa-2xl");
+icon.addEventListener('click',function(){
+    like(icon.id);
+    
+})
+
+//requete pour augmenter les likes
+function like(coursId){
+    var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    // Make an AJAX request to your backend view with the selected year and CSRF token
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'likes_cours' %}", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+    
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var cours = JSON.parse(xhr.responseText);
+            
+            console.log(cours["donnees"]);
+            var likesTexte = document.getElementById("likesTexte");
+            if (cours["donnees"] != "non"){
+                likesTexte.innerHTML = DOMPurify.sanitize(cours["donnees"]);
+            }else{
+                alert("une erreur s'est produite")
+            }
+            
+
+        };
+    }
+        
+    // envoie l'id du cours selectionne
+    xhr.send("cours=" +coursId);
+    }
+
+
+
+
+
+    //requete pour telecharger une ressource pdf
+    function telechargerPdfRessource(ressourceId){
+        var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        
+        url = urlServer+"pdf_ressource_lecon/"+ressourceId
+        
+        // Make an AJAX request to your backend view with the selected year and CSRF token
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+
+        xhr.responseType = 'blob';  // Spécifiez le type de réponse attendu (blob pour les fichiers)    
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    
+                    var responseContentType = xhr.getResponseHeader('Content-Type');
+                     if (responseContentType.includes('application/pdf')) {
+                        // Création du lien de téléchargement pour les fichiers PDF
+                        var blob = xhr.response;
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'mon_fichier.pdf';  // Nom du fichier à télécharger
+                        link.click();
+                        } else{
+
+                            //traiter le cas ou l'utilisateur ne possede pas d'abonnement
+                            //console.log("pdf");
+                        }
+                 };
+            
+            
+            };
+            xhr.send();
+    }
+
+
+
+
+
+
+    //requete pour telecharger une ressource video
+    function telechargerVideoRessource(ressourceId){
+        var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        
+        url = urlServer+"video_ressource_cours/"+ressourceId
+        
+        // Make an AJAX request to your backend view with the selected year and CSRF token
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+
+        xhr.responseType = 'blob';  // Spécifiez le type de réponse attendu (blob pour les fichiers)    
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    
+                    var responseContentType = xhr.getResponseHeader('Content-Type');
+                     if (responseContentType.includes('video/mp4')) {
+                        // Création du lien de téléchargement pour les fichiers PDF
+                        var blob = xhr.response;
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'lecon_video.mp4';  // Nom du fichier à télécharger
+                        link.click();
+                        } else{
+
+                            //traiter le cas ou l'utilisateur ne possede pas d'abonnement
+                            console.log("video");
+                        }
+                 };
+            
+            
+            };
+            xhr.send();
+    }
+
+
+
+
+       //requete acceder au contenu du lien hypertext des ressources
+       function ouvrirLienRessource(ressourceId){
+        var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        
+        url = urlServer+"lien_ressource/"+ressourceId
+        
+        // Make an AJAX request to your backend view with the selected year and CSRF token
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+
+         
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var donnees = JSON.parse(xhr.responseText);
+                
+                console.log(donnees);
+
+                if (donnees["statut"] === "ok"){
+                    window.location.href = donnees["lien"];
+                }
+                
+                
+    
+            };
+        }
+            xhr.send();
+    }
+</script>
+    {% endblock CodeJs %}
+
+
+
+

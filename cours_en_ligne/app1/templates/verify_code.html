@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Vérification du code{% endblock %}
+
+{% block content %}
+<div class="verification-section">
+    <div class="verification-form-container">
+        <h2>Vérification du code</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% elif message.tags == 'success' %}
+                    <div class="message">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'verify_code' %}" id="verification-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" id="verification_code" name="verification_code" required>
+            </div>
+            <button type="submit">Vérifier</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

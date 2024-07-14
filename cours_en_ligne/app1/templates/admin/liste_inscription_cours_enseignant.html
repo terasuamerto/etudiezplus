@@ -1,0 +1,37 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block sousMainContent %}
+                
+<div class="container">
+    <h2>Inscriptions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Cours</th>
+                <th>eleve</th>
+                <th>date inscription</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for inscription in allInscription %}
+                <tr>
+                    <td>{{ inscription.cours.titre }}</td>
+                    <td>{{ inscription.eleve.user.first_name }} {{ inscription.eleve.user.last_name }}</td>
+                    <td> {{ inscription.date_inscription|date:"l j F o H:i:s" }} </td>
+                    <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            
+            <!-- Ajoutez d'autres lignes pour chaque entrée -->
+        </tbody>
+    </table>
+    <a href="#" class="add-button">Ajouter une inscription</a>
+    <div class="nbre-element"> {{ allInscription|length }} élément(s)</div>
+</div>
+
+{% endblock sousMainContent %}

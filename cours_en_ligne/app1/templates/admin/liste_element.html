@@ -1,0 +1,39 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block sousMainContent %}
+                
+<div class="container">
+    <h2>{{ table }}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>intitule</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for element in elements %}
+                <tr>
+                    <td> {{ element.id }} </td>
+                    <td>{{ element.intitule }}</td>
+                    <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            
+            <!-- Ajoutez d'autres lignes pour chaque entrée -->
+        </tbody>
+    </table>
+    {% if table == "Matières" %}
+        <a href="#" class="add-button">Ajouter une matière</a>
+    {% else %}
+    <a href="#" class="add-button">Ajouter un niveau</a>
+        {% endif %}
+        <div class="nbre-element"> {{ elements|length }} élément(s)</div>
+</div>
+
+{% endblock sousMainContent %}

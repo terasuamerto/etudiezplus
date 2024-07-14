@@ -1,0 +1,255 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block LienEntete %}
+<link rel="stylesheet" href="{% static 'css/style_form.css' %}">
+{% endblock LienEntete %}
+
+
+
+{% block enteteTitre %}
+<h1>Informations générales sur le cours</h1>
+{% endblock enteteTitre %}
+
+
+{% block sousMainContent %}
+<div class="container">
+    <form id="add-course-form" method="POST"  enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="form-group">
+        <label for="titre">Titre :</label>
+        <input type="text" id="titre" name="titre" placeholder="Entrer le titre du cours" pattern="[a-zA-Z0-9]+" required>
+        <div class="error-message" id="error-titre"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description :</label>
+        <textarea id="description" name="description" rows="4" placeholder="Entrer une description du cours"  pattern="[a-zA-Z0-9]" required></textarea>
+        <div class="error-message" id="error-description"></div>
+      </div>
+      
+      
+      <div class="form-group">
+        <label for="niveau">Niveau :</label>
+        <select id="niveau" name="niveau" required>
+            <option value="default" selected>Choisisser un niveau</option>
+            {% for niveau in allNiveau %}
+                <option value="{{niveau.id}}">{{niveau.intitule}}</option>
+            {% endfor %}
+        </select>
+        <div class="error-message" id="error-niveau"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="matiere">Matière :</label>
+
+        <select id="matiere" name="matiere" required="true">
+            <option value="default" selected>Choisisser une matière</option>
+            {% for matiere in allMatiere %}
+                <option value="{{matiere.id}}">{{matiere.intitule}}</option>
+            {% endfor %}
+        </select>
+        <div class="error-message" id="error-matiere"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="prerequis">Prérequis :</label>
+        <input type="text" id="prerequis" name="prerequis" placeholder="aucune connaissance nécessaire" pattern="[a-zA-Z0-9]+" required>
+        <div class="error-message" id="error-prerequis"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="estimation">Estimation :</label>
+        <input type="text" id="estimation" name="estimation"  placeholder="9 heures pour terminer le cours" pattern="[a-zA-Z0-9]+" required>
+        <div class="error-message" id="error-estimation"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="detail_estimation">Détail de l'estimation :</label>
+        <input type="text" id="detail_estimation" name="detail_estimation" placeholder="3 semaines à 3 heures par semaine" pattern="[a-zA-Z0-9]+" required></input>
+        <div class="error-message" id="error-detail_estimation"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="a_propos">À propos :</label>
+        <textarea id="a_propos" name="a_propos" rows="4" placeholder="Entrer une description plus détaillée du cours" pattern="[a-zA-Z0-9]+" required></textarea>
+        <div class="error-message" id="error-a_propos"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="image">Image :</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <div class="error-message" id="error-image"></div>
+      </div>
+      
+      {% if from_cours %}
+        <button type="submit" class="btn-submit btn-submit-suivant"  onclick="addCoursAndContinue(event)">suivant</button>
+        
+      {% else %}
+        <button  class="btn-submit" >Enregistrer</button>
+      {% endif %}
+    </form>
+  </div>
+{% endblock sousMainContent %}
+
+
+
+{% block CodeJs %}
+
+<script>
+    
+
+
+
+
+    //ajoute le cours et effectue une redirection vers la page d'ajout de grands points
+    function addCoursAndContinue(event){
+        event.preventDefault();
+
+        if(validateForm()){
+            addCours();
+        }
+    }
+
+    function addCours(){
+        var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    
+        // Make an AJAX request to your backend view with the selected year and CSRF token
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'add_cours_enseignant' %}", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+        
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Parse the JSON response from the backend
+                var resultat = JSON.parse(xhr.responseText);
+    
+                if(resultat["success"]){
+                    var url = "{% url 'page_create_grands_points_enseignant' coursId=0 %}".replace('0', resultat["coursId"]);
+                     window.location.href = url;
+                    
+                }
+    
+    
+            
+                
+            }
+        };
+        var selectMatiere = document.getElementById("matiere");
+        var optionSelectionneeMatiere = selectMatiere.options[selectMatiere.selectedIndex].value;
+        var selectNiveau = document.getElementById("niveau");
+        var optionSelectionneeNiveau = selectNiveau.options[selectNiveau.selectedIndex].value;
+        var form = document.getElementById('add-course-form');
+        
+
+        var titre= document.getElementById('titre').value;
+        var description = document.getElementById('description').value;
+        var niveau = optionSelectionneeNiveau;
+        var matiere = optionSelectionneeMatiere ;
+        var prerequis = document.getElementById('prerequis').value;
+        var estimation = document.getElementById('estimation').value ;
+        var detail_estimation = document.getElementById('detail_estimation').value;
+        var a_propos =  document.getElementById('a_propos').value;
+        var image = document.getElementById('image').value ;
+        form.reset();
+        xhr.send(
+            "titre="+ titre
+            + '&' + "description="+ description
+            + '&' + "niveau="+niveau
+            + '&' +"matiere="+matiere
+            + '&' + "prerequis="+prerequis
+            + '&' + "estimation="+estimation
+            + '&' +"detail_estimation="+detail_estimation
+            + '&' +"a_propos="+a_propos
+            + '&' +"image="+image
+
+        );
+    };
+
+
+
+
+
+    function validateForm() {
+        var isValid = true;
+    
+        // Reset error messages and styles
+        var formGroups = document.querySelectorAll('.form-group');
+        formGroups.forEach(function(group) {
+            group.classList.remove('error');
+            var errorElement = group.querySelector('.error-message');
+            errorElement.textContent = '';
+        });
+    
+        // Validate each input field
+        var titre = document.getElementById('titre');
+        var description = document.getElementById('description');
+        var niveau = document.getElementById('niveau');
+        var matiere = document.getElementById('matiere');
+        var prerequis = document.getElementById('prerequis');
+        var estimation = document.getElementById('estimation');
+        var detail_estimation = document.getElementById('detail_estimation');
+        var a_propos = document.getElementById('a_propos');
+        var image = document.getElementById('image');
+    
+        if (!titre.validity.valid) {
+            isValid = false;
+            showError('titre', 'Veuillez entrer un titre valide.');
+        }
+    
+        if (!description.validity.valid) {
+            isValid = false;
+            showError('description', 'Veuillez entrer une description valide.');
+        }
+    
+        if (niveau.value === 'default') {
+            isValid = false;
+            showError('niveau', 'Veuillez choisir un niveau.');
+        }
+    
+        if (matiere.value === 'default') {
+            isValid = false;
+            showError('matiere', 'Veuillez choisir une matière.');
+        }
+    
+        if (!prerequis.validity.valid) {
+            isValid = false;
+            showError('prerequis', 'Veuillez entrer des prérequis valides.');
+        }
+    
+        if (!estimation.validity.valid) {
+            isValid = false;
+            showError('estimation', 'Veuillez entrer une estimation valide.');
+        }
+    
+        if (!detail_estimation.validity.valid) {
+            isValid = false;
+            showError('detail_estimation', 'Veuillez entrer un détail d\'estimation valide.');
+        }
+    
+        if (!a_propos.validity.valid) {
+            isValid = false;
+            showError('a_propos', 'Veuillez entrer une description à propos valide.');
+        }
+    
+        if (!image.validity.valid) {
+            isValid = false;
+            showError('image', 'Veuillez sélectionner une image valide.');
+        }
+    
+        return isValid;
+    }
+    
+    function showError(fieldName, errorMessage) {
+        var field = document.getElementById(fieldName);
+        var errorElement = document.getElementById('error-' + fieldName);
+        errorElement.textContent = errorMessage;
+        field.parentNode.classList.add('error');
+    }
+    
+</script>
+
+{% endblock CodeJs %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Liste Cours
+{% endblock %}
+
+ {% block LienEntete %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_cardview.css' %}">
+    {% endblock LienEntete %}
+
+
+
+
+{% block content %}
+<section id="blog">
+    {% for niveau in allCours %}
+        <div class="blog-heading">
+            <!-- <span>Page des Livres</span> -->
+            <h3>{{ niveau.niveau.intitule }}</h3>
+        </div>
+        <div class="blog-container">
+            {% for cours in niveau.cours %}
+                
+                    <div class="blog-box">
+                        <div class="blog-img">
+                            <a href="{% url 'infos_cours' id=cours.id %}">  <img src="{% url 'image' id=cours.id %}" alt="image cours"> </a>
+                        </div>
+
+                        <div class="blog-text">
+                           <span>{{ cours.matiere.intitule }} / {{ cours.niveau.intitule }}</span>
+                            <a href="{% url 'infos_cours' id=cours.id %}" class="blog-title">{{ cours.titre }}</a>
+                            <p>{{ cours.description }}</p>
+                            <!-- <a href="#">Détails</a> -->
+                            <div class="details">
+                                <div class="view">
+                                    <i class="fa-regular fa-clock fa-lg " style="color: #0073e6;" ></i>
+                                    <span class="text-span">{{ cours.vues }}</span>
+                                </div>
+                                <div class="avis">
+                                    <i class="fa-solid fa-star fa-lg" style="color: #FFD43B;"></i>
+
+
+                                <span class="text-span">{{ cours.likes }}</span>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                
+            {% endfor %}
+        </div>
+    <a href="{% url 'liste_cours_niveau' niveau=niveau.niveau.id %}">voir tout</a>
+    <div class="borderbottom">
+
+        </div>
+
+
+    {% endfor %}
+
+    </section>
+{% endblock %}
+
+
+{% block CodeJs %}
+    {% endblock CodeJs %}

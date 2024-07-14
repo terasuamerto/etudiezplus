@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<main>
+    <section class="login-section">
+        <div class="login-form-container">
+            <h2>Connexion</h2>
+            <div id="login-options">
+                <button id="login-by-number" onclick="showNumberLogin()">Se connecter avec un numéro</button>
+                <button id="login-by-email" onclick="showEmailLogin()">Se connecter par email</button>
+            </div>
+            <form id="connexion-form" method="post" action="{% url 'connexion'%}">
+                {% csrf_token %}
+                {% if errorLogin %}
+                    <div class="error-message" id="errorLogin">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endif %}
+                <div class="form-group" id="number-login" style="display: none;">
+                    <label for="tel">Numéro:</label>
+                    <input type="tel" id="tel" name="tel" value="+226 " oninput="maintainPrefix()" required>
+                </div>
+                <div class="form-group" id="email-login" style="display: none;">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Email">
+                </div>
+                <div class="form-group" id="password-group" style="display: none;">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" placeholder="Mot de passe">
+                </div>
+                <button type="submit">Se connecter</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script>
+    function showNumberLogin() {
+        document.getElementById('number-login').style.display = 'block';
+        document.getElementById('email-login').style.display = 'none';
+        document.getElementById('password-group').style.display = 'block';
+    }
+
+    function showEmailLogin() {
+        document.getElementById('number-login').style.display = 'none';
+        document.getElementById('email-login').style.display = 'block';
+        document.getElementById('password-group').style.display = 'block';
+    }
+
+    function maintainPrefix() {
+        const input = document.getElementById('tel');
+        if (!input.value.startsWith('+226 ')) {
+            input.value = '+226 ';
+        }
+    }
+
+    // Initial setting of the prefix
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('tel');
+        if (!input.value.startsWith('+226 ')) {
+            input.value = '+226 ';
+        }
+    });
+</script>
+{% endblock %}

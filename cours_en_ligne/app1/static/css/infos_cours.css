@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+:root{
+    --header-color: #f4f3fd;
+    --button-bg-color: rgb(45, 45, 241);
+    --button-text-color:white;
+    --infos-color: #474747;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+ }
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+ .header{
+    background: var(--header-color);
+    height: 400px;
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding:0 10%;
+   
+ }
+
+
+ .cours{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+ }
+
+ h1{
+    font-size: 35px;
+    margin-bottom: 30px;
+    font-weight: bold;
+ }
+
+ .inscription{
+    display: flex;
+    align-items: center;
+ }
+
+ button{
+    height: 50px;
+    width: 150px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    margin:20px 20px 20px 0 ;
+    cursor: pointer;
+ }
+ .infos{
+    color: var(--infos-color);
+    margin-bottom: 50px;
+ }
+
+i{
+    font-weight: bold;
+}
+ .details{
+    height: 200px;
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
+    border-radius: 10px;
+    margin: 50px;
+    padding: 15px; 
+ }
+
+ .niveau,.durer{
+   margin: 1pt;
+ }
+ span, .stat{
+    font-weight: bold;
+    font-size: 20px;
+ }
+
+ p{
+
+    font-size: 15px;
+    color: var(--infos-color);
+    margin-top: 10px;
+ }
+
+ .infos_cours{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 50px;
+ }
+
+ h2{
+    padding: 10px;
+    font-weight: bold;
+ }
+
+ .a_propos>p{
+    width: 900px;
+    line-height: 1.7rem;
+    font-size: 20px;
+ }
+
+ .contenu>h2{
+margin-top: 50px;
+padding-bottom: 20px;
+ }
+
+ .contenu{
+   display: flex;
+   flex-direction: column;
+ }
+
+ .elements{
+   display: flex;
+   justify-content: space-between;
+   width: 900px;
+   margin: 20px;
+   flex-wrap: wrap;
+ }
+
+ .items{
+   display: flex;
+   justify-content: center;
+   width: 50%;
+   margin-bottom: 30px;
+ }
+
+ .items>i{
+   margin: 15px;
+ }
+
+ .items>p{
+   font-size: 20px;
+   line-height: 1.7rem;
+ }
+
+ @media screen and (max-width:1022px){
+   .a_propos,.elements{
+      width: 700px;
+    }
+
+    .a_propos>p{
+      width: 100%;
+    }
+
+    
+ }
+
+
+ @media screen and (max-width:829px){
+   span, .stat{ 
+      font-size: 15px;
+   }
+
+   .a_propos,.elements{
+      width: 600px;
+    }
+
+    .a_propos>p{
+      width: 100%;
+    }
+
+ }
+ 
+ @media screen and (max-width:715px){
+   .header{
+      flex-direction: column;
+      justify-content: space-evenly;
+   }
+   .details{
+      flex-direction: column-reverse;
+   }
+
+   .a_propos,.elements{
+      width: 500px;
+    }
+
+    .a_propos>p{
+      width: 100%;
+    }
+
+
+   .elements{
+      flex-direction: column;
+    }
+    .items{
+      width: 80%;
+    }
+ }
+ 
+ 
+ @media screen and (max-width:580px){
+   .cours{
+      align-items: center;
+   }
+   .a_propos, .elements,.items>p{
+      width: 400px;
+      font-size: 15px;
+   }
+
+   .a_propos>p{
+      width: 100%;
+      font-size: 15px;
+    }
+   .infos{
+      margin-top: 20px;
+   }
+   .inscription{
+      flex-direction: column;
+   }
+   
+ } 
+
+
+ @media screen and (max-width:471px){
+   
+   
+
+   .a_propos, .elements{
+      width: 300px;
+     
+      font-size: 15px;
+   }
+
+   .items{
+      width: 100%;
+   }
+ }
+
+
+
+ @media screen and (max-width:414px){
+   h1{
+      font-size: 25px
+   }
+
+   button{
+      height: 50px;
+      width: 100px;
+     
+      font-size: 15px;
+   }
+   
+
+   .a_propos, .elements{
+      width: 300px;
+     
+      font-size: 15px;
+   }
+
+   .items{
+      width: 100%;
+   }
+ }

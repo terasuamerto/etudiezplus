@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <img src="{% static 'images/logo.png' %}" alt="Logo">
+            <h1>Etudions plus</h1>
+            <nav>
+                <a href="{% url 'accueil' %}">Accueil</a>
+                <a href="{% url 'connexion' %}">Se connecter</a>
+                <a href="{% url 'inscription' %}">S'inscrire</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="partners">
+                    <h4>Partenaires</h4>
+                    <ul>
+                        <li><a href="https://www.univ-bobo.gov.bf/" target="_blank"><img src="{% static 'images/unb.jfif' %}" alt="Partenaire 1"> UNB</a></li>
+                        <li><a href="https://www.esi-upb.bf/" target="_blank"><img src="{% static 'images/esi.jfif' %}" alt="Partenaire 2"> ESI</a></li>
+                        <li><a href="https://ligdicash.com/" target="_blank"><img src="{% static 'images/ligdicash.jfif' %}" alt="Partenaire 3"> Ligdicash</a></li>
+                    </ul>
+                </div>
+                <div class="social">
+                    <h4>Suivez-nous</h4>
+                    <ul>
+                        <li><a href="https://facebook.com" target="_blank"><img src="{% static 'images/fb.jfif' %}" alt="Facebook"></a></li>
+                        <li><a href="https://twitter.com" target="_blank"><img src="{% static 'images/x.jfif' %}" alt="X"></a></li>
+                        <li><a href="https://youtube.com" target="_blank"><img src="{% static 'images/youtube.jfif' %}" alt="Youtube"></a></li>
+                    </ul>
+                </div>
+                <div class="download-app">
+                    <h4>Téléchargez notre application</h4>
+                    <a href="https://link-to-your-app.com" target="_blank">Télécharger</a>
+                </div>
+            </div>
+            <p>&copy; 2024 Etudions plus. Tous droits réservés.</p>
+        </footer>
+    </div>
+</body>
+</html>

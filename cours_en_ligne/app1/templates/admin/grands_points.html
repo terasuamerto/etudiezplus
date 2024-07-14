@@ -1,0 +1,39 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block LienEntete %}
+<link rel="stylesheet" href="{% static 'css/style_form.css' %}">
+{% endblock LienEntete %}
+
+
+
+{% block enteteTitre %}
+<h1>Ajout de grands points</h1>
+{% endblock enteteTitre %}
+
+
+{% block sousMainContent %}
+<style>
+   
+  </style>
+
+<div class="container">
+
+<form id="submit-ressource-form" method="POST">
+
+  <div class="form-group">
+    <label for="description">Description :</label>
+    <textarea id="description" name="description" rows="4" placeholder="Entrer une description"  pattern="[a-zA-Z0-9]" required></textarea>
+    <div class="error-message" id="error-description"></div>
+  </div>
+
+
+  <button type="submit" class="btn-submit" >Enregistrer et ajouter un autre grand point</button>
+  <button type="submit" class="btn-submit suivant">Suivant</button>
+</form>
+
+
+</div>
+{% endblock sousMainContent %}

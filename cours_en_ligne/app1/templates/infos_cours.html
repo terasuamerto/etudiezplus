@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Informations cours
+{% endblock %}
+
+ {% block LienEntete %}
+<link rel="stylesheet" href= "{% static 'css/infos_cours.css' %}">
+    {% endblock LienEntete %}
+
+
+{% block content %}
+<div class="container">
+<div class="header">
+        <div class="cours">
+            <h1>{{ cours.titre }}</h1>
+            <div class="inscription">
+                {% csrf_token %}
+                <button class="btnclass" id="{{ cours.id }}">S'inscrire</button>
+                <p>S'incrire et commencer le cours</p>
+            </div>
+            <div class="infos">
+                <i>{{ nbreinscrit }}</i> déjà inscrit(s)
+            </div>
+        </div>
+        <div class="teacher">
+                Instructeur: <i>{{ cours.instructeur.user.first_name }} {{ cours.instructeur.user.last_name }}</i>
+        </div>
+    </div>
+    <div class="details">
+
+            <div class="niveau">
+                <span> niveau {{ cours.niveau.intitule }}</span>
+                <p>{{ cours.prerequis }}</p>
+            </div>
+            <div class="durer">
+                <span>{{ cours.estimation }}</span>
+                <p>{{ cours.detail_estimation }}</p>
+            </div>
+            <div class="stat">
+                {{ cours.likes }}
+                <i class="fa-solid fa-star fa-lg" style="color: #FFD43B;"></i>
+            </div>
+    </div>
+
+    <div class="infos_cours">
+        <div class="a_propos">
+            <h2>A propo du cours</h2>
+            <p>{{ cours.a_propos }}</p>
+        </div>
+        <div class="contenu">
+            <h2>
+                Ce que vous apprendrez
+            </h2>
+            <div class="elements">
+                {% for point in allGrandsPoints %}
+                    <div class="items">
+                        <i class="fa-sharp fa-solid fa-check fa-2xl" style="color: #0073e6;"></i>
+                        <p>{{ point.contenu_texte|safe }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block CodeJs %}
+<script>
+    var btnClass = document.querySelector(".btnclass");
+
+    btnClass.addEventListener('click', function(){
+        console.log(btnClass.id);
+        inscription(btnClass.id);
+    })
+
+function inscription(coursId){
+    var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    // Make an AJAX request to your backend view with the selected year and CSRF token
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'inscription_cours' %}", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("X-CSRFToken", csrfToken);  // Include CSRF token in headers
+    
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var resultat = JSON.parse(xhr.responseText);
+            
+            console.log(resultat);
+            alert(resultat["message"]);
+            window.location = "{% url 'details_cours' id=cours.id lecon=1 %}"
+            // var likesTexte = document.getElementById("likesTexte");
+            // likesTexte.innerHTML = DOMPurify.sanitize(cours["donnees"]);
+
+        };
+    }
+        
+    // envoie l'id du cours selectionne
+    xhr.send("coursid=" +coursId);
+}
+
+</script>
+
+    {% endblock CodeJs %}

@@ -1,0 +1,116 @@
+.form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .form-group input[type="text"],
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .form-group input[type="file"] {
+    margin-top: 5px;
+  }
+
+  .form-group .form-file-label {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .form-group .form-file-label span {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .form-group .form-file {
+    display: flex;
+    align-items: center;
+  }
+
+  .form-group .form-file input[type="file"] {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .form-group .form-file img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+
+  .btn-submit {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-submit:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-add {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-add:hover {
+    background-color: #218838;
+  }
+
+  .btn-remove {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-remove:hover {
+    background-color: #c82333;
+  }
+
+ .error {
+     /* Example of border change on error */
+    color: #c82333;
+  }
+
+.form-group.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 0.25em;
+}

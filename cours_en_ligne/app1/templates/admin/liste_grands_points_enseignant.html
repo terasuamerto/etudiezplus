@@ -1,0 +1,35 @@
+{% extends 'admin/page_admin_base_enseignant.html' %}
+{% load static %}
+
+
+
+{% block sousMainContent %}
+                
+<div class="container">
+    <h2>Grands points</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cours</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for point in allGrandsPoints %}
+                <tr>
+                    <td> {{ point.id }} </td>
+                    <td>{{ point.cours.titre }}</td>
+                    <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            
+            <!-- Ajoutez d'autres lignes pour chaque entrée -->
+        </tbody>
+    </table>
+    <a href="#" class="add-button">Ajouter un point</a>
+    <div class="nbre-element"> {{ allGrandsPoints|length }} élément(s)</div>
+</div>
+
+{% endblock sousMainContent %}
